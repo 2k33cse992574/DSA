@@ -1,19 +1,18 @@
 class Solution {
 public:
     int minLength(string s) {
-        if (s.substr(0, 2) == "AB") {
-            s.erase(s.find("AB"), 2);
-        }
-        if (s.substr(0, 2) == "CD") {
-            s.erase(s.find("CD"), 2);
-        }
-        while (s.find("AB") != -1 || s.find("CD") != -1) {
-            if (s.find("AB") != -1) {
-                s.erase(s.find("AB"), 2);
-            } else if (s.find("CD") != -1) {
-                s.erase(s.find("CD"), 2);
+        string temp = "";
+        for (char c : s) {
+            temp.push_back(c);
+            int n = temp.size();
+            if (n >= 2) {
+                if (temp[n - 2] == 'A' && temp[n - 1] == 'B' ||
+                    temp[n - 2] == 'C' && temp[n - 1] == 'D') {
+                    temp.pop_back();
+                    temp.pop_back();
+                }
             }
         }
-        return s.size();
+        return temp.size();
     }
 };
