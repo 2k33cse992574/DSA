@@ -35,11 +35,7 @@ public:
             }
             ans.push_back(level);
         }
-        vector<vector<int>> res;
-        int n = ans.size();
-        for (int i = 0; i < n; i++) {
-            res.push_back(ans[n - i - 1]);
-        }
-        return res;
+        reverse(ans.begin(), ans.end());
+        return ans;
     }
 };
