@@ -9,50 +9,51 @@
  */
 class Solution {
 public:
-    void markParent(TreeNode* root,
-                    unordered_map<TreeNode*, TreeNode*>& parent) {
+    void helper(TreeNode* root, unordered_map<TreeNode*, TreeNode*>& parent) {
+        if (!root)
+            return;
         queue<TreeNode*> q;
         q.push(root);
         while (!q.empty()) {
-            TreeNode* curr = q.front();
+            TreeNode* node = q.front();
             q.pop();
-            if (curr->left) {
-                parent[curr->left] = curr;
-                q.push(curr->left);
+            if (node->left) {
+                parent[node->left] = node;
+                q.push(node->left);
             }
-            if (curr->right) {
-                parent[curr->right] = curr;
-                q.push(curr->right);
+            if (node->right) {
+                parent[node->right] = node;
+                q.push(node->right);
             }
         }
     }
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        unordered_map<TreeNode*, TreeNode*> parent;
-        markParent(root, parent);
-        queue<TreeNode*> q;
-        unordered_map<TreeNode*, bool> visited;
-        q.push(target);
-        visited[target] = true;
         vector<int> ans;
-        int curr_level = 0;
+        unordered_map<TreeNode*, TreeNode*> parent;
+        unordered_map<TreeNode*, bool> vis;
+        helper(root, parent);
+        queue<TreeNode*> q;
+        q.push(target);
+        vis[target] = true;
+        int count = 0;
         while (!q.empty()) {
             int size = q.size();
-            if (curr_level++ == k)
+            if (count++ == k)
                 break;
             for (int i = 0; i < size; i++) {
-                TreeNode* curr = q.front();
+                TreeNode* node = q.front();
                 q.pop();
-                if (curr->left && !visited[curr->left]) {
-                    q.push(curr->left);
-                    visited[curr->left] = true;
+                if (node->left && !vis[node->left]) {
+                    q.push(node->left);
+                    vis[node->left] = true;
                 }
-                if (curr->right && !visited[curr->right]) {
-                    q.push(curr->right);
-                    visited[curr->right] = true;
+                if (node->right && !vis[node->right]) {
+                    q.push(node->right);
+                    vis[node->right] = true;
                 }
-                if (parent[curr] && !visited[parent[curr]]) {
-                    q.push(parent[curr]);
-                    visited[parent[curr]] = true;
+                if (parent[node] && !vis[parent[node]]) {
+                    q.push(parent[node]);
+                    vis[parent[node]] = true;
                 }
             }
         }
